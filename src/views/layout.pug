@@ -1,0 +1,36 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='/stylesheets/main.css')
+
+    block stylesheet
+
+    script(src='/jquery/jquery.min.js')
+  body
+    header
+      h1 P E O P L E
+      nav
+        li
+          a(href='/') Main
+        if (!isAuth)
+          li
+            a(href='/registration') Registration
+          li 
+            a(href='/login') Log In
+        else 
+          li 
+            a(href='/logout') Log Out
+          li
+            a(href='/profile') Profile
+      hr
+
+    block content
+
+    footer
+
+    script(src='/js/main.js')
+
+    block scripts

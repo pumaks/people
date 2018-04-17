@@ -1,0 +1,22 @@
+extends layout
+
+block scripts
+  script(src='/js/users.js')
+
+block content
+  h1= title
+
+  #users-page
+
+    .search
+      label(for='user-name') Поиск пользователя:
+      input#user-name(type='text' name='user-name')
+
+    .list
+      each user, index in users
+        p.user= `${index}: ${user.login}`
+      else
+        h3 There are no users yet
+      
+    if (users)
+      span#load-users Load users

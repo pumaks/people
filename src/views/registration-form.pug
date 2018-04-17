@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  #reg-page
+    h4= title
+
+    form(method='POST', action='')
+      label(for='email') Email
+      input#email(type='email' name='email' value=(user ? user.email : ''))
+      if errors.email
+        p= errors.email
+      br
+
+      label(for='login') Login
+      input#login(type='text' name='login' value=(user ? user.login : ''))
+      if errors.login
+        p= errors.login
+      br
+
+      label(for='password') Password
+      input#password(type='password' name='password' value=(user ? user.password : ''))
+      if errors.password
+        p= errors.password
+      br
+
+      label(for='confirmationPassword') Submit password
+      input#confirmationPassword(type='password' name='confirmationPassword' value=(user ? user.confirmationPassword : ''))
+      if errors.confirmationPassword
+        p= errors.confirmationPassword
+      br
+
+      input(type='submit')

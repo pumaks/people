@@ -1,0 +1,9 @@
+extends layout
+
+block scripts
+  script(src='/js/profile.js')
+
+block content
+  h1= title
+
+  h3 Hello, !{user.login}
