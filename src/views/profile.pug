@@ -4,6 +4,11 @@ block scripts
   script(src='/js/profile.js')
 
 block content
-  h1= title
+  #profile-page
+    h1= title
 
-  h3 Hello, !{user.login}
+    h3 Hello, !{user.login}
+
+    .avatar
+      img(src=(user.avatar || '/img/svg/avatar.svg'))
+      input.hide(type='file' name='avatar')

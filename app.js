@@ -15,7 +15,7 @@ const indexRouter = require(`${routesPath}index`);
 const userRouter = require(`${routesPath}user`);
 const profileRouter = require(`${routesPath}profile`);
 
-const authContoller = require('./src/controllers/authenticate');
+const authController = require('./src/controllers/authenticate');
 
 const app = express();
 
@@ -51,11 +51,11 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, './src/public')));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 
-app.use(authContoller.isAuth);
+app.use(authController.isAuth);
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);
-app.use('/profile', profileRouter);
+app.use('/profile', authController.isAccess, profileRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
