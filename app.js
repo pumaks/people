@@ -20,7 +20,8 @@ const authController = require('./src/controllers/authenticate');
 const app = express();
 
 const mongoose = require('mongoose');
-const mongoDb = 'mongodb://root:root18@ds241869.mlab.com:41869/people';
+const mongoDb = 'mongodb://127.0.0.1:27017/people';
+// const mongoDb = 'mongodb://root:root18@ds241869.mlab.com:41869/people';
 
 mongoose.connect(mongoDb);
 mongoose.Promise = global.Promise;
@@ -48,8 +49,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/src', express.static(path.join(__dirname, './src')));
+app.use(
+  '/jquery',
+  express.static(path.join(__dirname, './node_modules/jquery/dist'))
+);
 app.use(express.static(path.join(__dirname, './src/public')));
-app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 
 app.use(authController.isAuth);
 

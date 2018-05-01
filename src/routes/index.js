@@ -19,7 +19,7 @@ router.get('/registration', (req, res) => {
   res.render('registration-form', { title: 'Registration', errors: {} });
 });
 
-router.post('/registration', registrationController.addUser);
+router.post('/registration', registrationController.regUser);
 
 router.get('/login', (req, res) => {
   res.render('login', { title: 'Login' });

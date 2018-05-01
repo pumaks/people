@@ -1,5 +1,8 @@
 extends layout
 
+block styles
+  link(rel='stylesheet' href='/styles/profile.css')
+
 block scripts
   script(src='/js/profile.js')
 
@@ -12,3 +15,4 @@ block content
     .avatar
       img(src=(user.avatar || '/img/svg/avatar.svg'))
       input.hide(type='file' name='avatar')
+

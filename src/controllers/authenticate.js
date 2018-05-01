@@ -36,40 +36,40 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-module.exports = {
-  login(req, res, next) {
-    passport.authenticate('local', (err, user, enteredData) => {
-      if (err) return next(err);
-      if (user)
-        return req.logIn(user, err => {
-          if (err) return next(err);
-          res.redirect('/profile');
-        });
-      res.render('login', {
-        title: 'Login',
-        user: enteredData,
-        err: 'incorrect data'
+const login = (req, res, next) => {
+  passport.authenticate('local', (err, user, enteredData) => {
+    if (err) return next(err);
+    if (user)
+      return req.logIn(user, err => {
+        if (err) return next(err);
+        res.redirect('/profile');
       });
-    })(req, res, next);
-  },
+    res.render('login', {
+      title: 'Login',
+      user: enteredData,
+      err: 'incorrect data'
+    });
+  })(req, res, next);
+};
 
-  logout(req, res) {
-    req.logout();
-    res.redirect('/login');
-  },
+const logout = (req, res) => {
+  req.logout();
+  res.redirect('/login');
+};
 
-  isAuth(req, res, next) {
-    req.isAuthenticated() ?
-      (res.locals.isAuth = true) :
-      (res.locals.isAuth = false);
+const isAuth = (req, res, next) => {
+  if (req.isAuthenticated()) res.locals.isAuth = true;
+  else res.locals.isAuth = false;
+  next();
+};
+
+const isAccess = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.locals.isAuth = true;
     next();
-  },
+  } else res.redirect('/login');
+};
 
-  isAccess(req, res, next) {
-    if (req.isAuthenticated()) {
-      res.locals.isAuth = true;
-      return next();
-    }
-    res.redirect('/login');
-  }
+module.exports = {
+  login, logout, isAuth, isAccess
 };
