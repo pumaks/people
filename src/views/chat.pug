@@ -1,0 +1,12 @@
+extends layout
+
+block scripts
+  script(src='/js/chat.js')
+
+block content
+  h1 C H A T
+
+  input.msg(type='text' name='msg')
+  input.send(type='submit' style='pointer-events: none')
+
+  .chat

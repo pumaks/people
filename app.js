@@ -8,16 +8,22 @@ const logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
 const mongoStore = require('connect-mongo')(session);
+const expressWs = require('express-ws');
+
+const app = express();
+
+expressWs(app);
 
 const routesPath = './src/routes/';
 
 const indexRouter = require(`${routesPath}index`);
 const userRouter = require(`${routesPath}user`);
 const profileRouter = require(`${routesPath}profile`);
+const chatRouter = require(`${routesPath}chat`);
 
 const authController = require('./src/controllers/authenticate');
 
-const app = express();
+
 
 const mongoose = require('mongoose');
 const mongoDb = 'mongodb://127.0.0.1:27017/people';
@@ -61,6 +67,7 @@ app.use(authController.isAuth);
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/profile', authController.isAccess, profileRouter);
+app.use('/chat', chatRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
