@@ -1,0 +1,24 @@
+extends ../layout
+
+block scripts
+  script(src='/js/Chat/dialog.js')
+
+block content
+  h1= title
+
+  #dialog(data-chat-id=`${dialog._id}`)
+
+    .members
+      p.companion= companion.login
+
+    .messages
+      each msg in dialog.messages || []
+        .msg
+          .text= msg.text
+          .from= msg.from
+          .time= msg.createAt
+      else 
+        p no messages
+
+    input(type='text', name='msgText')
+    input.send-msg(type='submit')

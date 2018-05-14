@@ -67,7 +67,7 @@ app.use(authController.isAuth);
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/profile', authController.isAccess, profileRouter);
-app.use('/chat', chatRouter);
+app.use('/chat', authController.isAccess, chatRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

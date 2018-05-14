@@ -2,8 +2,6 @@
 
 const mongoose = require('mongoose');
 
-const AdditionalInfo = require('./additionalInfo');
-
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(

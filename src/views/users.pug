@@ -14,7 +14,8 @@ block content
 
     .list
       each user, index in users
-        p.user= `${index}: ${user.login}`
+        span.user= `${index}: ${user.login}`
+        a.chatting(href=`/chat/${user.login}`) chatting
       else
         h3 There are no users yet
       
