@@ -6,7 +6,7 @@ block scripts
 block content
   h1= title
 
-  #dialog(data-chat-id=`${dialog._id}`)
+  #dialog
 
     .members
       p.companion= companion.login
@@ -19,6 +19,8 @@ block content
           .time= msg.createAt
       else 
         p no messages
-
-    input(type='text', name='msgText')
-    input.send-msg(type='submit')
+    form
+      input(type='hidden' name='chatId', value=`${dialog._id}`)
+      input(type='hidden' name='companionId', value=`${companion._id}`)
+      input(type='text', name='msgText')
+      span.send-msg Send msg

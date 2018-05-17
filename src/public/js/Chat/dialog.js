@@ -4,20 +4,37 @@ const chatId = $('#dialog').data('chatId');
 
 const ws = new WebSocket(`ws://${window.location.host}/chat/${chatId}`);
 
-// $('.send-msg').click(function() {
-//   const text = $('input[name=msgText]').val();
-//   const from = 
-//   const data = { chatId, text,  };
-//   ws.send(JSON.stringify(data));
-// });
+const getFormData = $form => {
+  const formData = {};
+  $form.children().each((i, elem) => (formData[elem.name] = elem.value));
+  return formData;
+};
 
-ws.onmessage = (e) => {
-  const msg = e.data;
-  $('.messages').append(
-    `<div class='msg'>
+$('.send-msg').click(function(e) {
+  const fd = getFormData($('form'));
+  ws.send(JSON.stringify(fd));
+});
+
+$('input[name=msgText]').keypress(e => {
+  const cid = $('input[name=companionId]').val();
+  ws.send(JSON.stringify({ type: 'writing', companionId: cid }));
+});
+
+
+
+ws.onmessage = e => {
+  console.log(e.data);
+  const msg = JSON.parse(e.data);
+  if (msg.type === 'writing') {
+    $('.messages').append('<span class="wr">writing...</span>');
+    setTimeout(() => $('.wr').remove(), 1000);
+  } else {
+    $('.messages').append(
+      `<div class='msg'>
         <div class='text'>${msg.text}</div>
         <div class='from'>${msg.from}</div>
-        <div class='time'>${msg.time}</div>
+        <div class='time'>${msg.createdAt}</div>
     </div>`
-  );
-}
+    );
+  }
+};
