@@ -32,27 +32,21 @@ const regUser = [
     .custom((val, { req }) => val === req.body.password)
     .withMessage('Password not same'),
 
-  async(req, res) => {
+  async (req, res) => {
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
       const errors = {};
       for (const error of validation.array()) {
         Object.assign(errors, { [error.param]: error.msg });
       }
-
       res.render('registration-form', {
         title: 'Registration',
         user: req.body,
         errors
       });
-
     } else {
-      try {
-        await addUser(req.body, req.headers.host);
-        res.redirect('/');
-      } catch (err) {
-        res.render('error', { message: err.message });
-      }
+      await addUser(req.body, req.headers.host);
+      res.redirect('/');
     }
   }
 ];

@@ -13,6 +13,6 @@ block content
     h3 Hello, !{user.login}
 
     .avatar
-      img(src=(user.avatar || '/img/svg/avatar.svg'))
+      img(src=(user.avatar || '/img/svg/avatar.svg') onclick='$("input[name=avatar]").click()')
       input.hide(type='file' name='avatar')
 

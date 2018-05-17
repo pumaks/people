@@ -6,11 +6,14 @@ const router = express.Router();
 const registrationController = require('../controllers/registration');
 const userController = require('../controllers/user');
 const authController = require('../controllers/authenticate');
+const wsController = require('../controllers/ws');
 
 /* GET home page. */
 router.get('/', (req, res) => {
   res.render('index', { title: req.ip });
 });
+
+router.ws('/', wsController.index);
 
 router.get('/users', userController.usersList);
 router.post('/users/load', userController.usersListAjax);
