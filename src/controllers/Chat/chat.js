@@ -21,18 +21,22 @@ const index = async (req, res) => {
   });
 };
 
-const sendToWS = (ws, data) => ws.send(JSON.stringify(data));
+const sendToWS = (ws, ...dataArr) => {
+  const data = {};
+  dataArr.forEach(obj => Object.assign(data, obj));
+  ws.send(JSON.stringify(data));
+};
 
 const sendMessage = async ({ msgText, companionId, chatId }, ws) => {
-  const msg = await Message.create(msgText, companionId);
-  Dialog.addMsg(chatId, msg._id);
+  const { _doc: msg } = await Message.create(msgText, companionId);
+  Dialog.addMsgToDialog(chatId, msg._id);
   const companionWS = online.find(ws => ws.userId.toString() === companionId);
   if (companionWS) sendToWS(companionWS, msg);
   else sendNotification(companionId, { text: msgText, login: ws.login });
-  sendToWS(ws, msg);
+  sendToWS(ws, msg, { type: 'msg' });
 };
 
-const sendTyping = ({ companionId }) => {
+const sendTypingSignal = ({ companionId }) => {
   const companionWS = online.find(ws => ws.userId.toString() === companionId);
   if (companionWS) sendToWS(companionWS, { type: 'typing' });
 };
@@ -49,7 +53,7 @@ const parseMsg = e => {
       sendMessage(data, e.target);
       break;
     case 'typing':
-      sendTyping(data);
+      sendTypingSignal(data);
       break;
   }
 };

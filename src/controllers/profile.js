@@ -38,12 +38,8 @@ const renderProfile = async(req, res) => {
     { userId: req.user._id },
     { userId: 0, _id: 0 }
   ).exec();
-  // const user = req.user;
-  console.log(additionalInfo);
-  // Object.assign(req.user, { h: 'l' });
   req.user.avatar = additionalInfo.avatar;
   res.render('profile', { title: 'Profile', user: req.user });
-  console.log(req.user);
 };
 
 module.exports = {

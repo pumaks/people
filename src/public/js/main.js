@@ -3,11 +3,21 @@
 (function() {
   const ws = new WebSocket(`ws://${window.location.host}/`);
 
-  ws.onmessage = e => {
-    const data = JSON.parse(e.data);
+  const showNotification = ({ login }) => {
     $('body').append(`
-    <a href='/chat/${data.login}'>Message from ${data.login}</a>
+    <a href='/chat/${login}'>Message from ${login}</a>
   `);
   };
+
+  const parseMsg = e => {
+    const data = JSON.parse(e.data);
+    switch (data.type) {
+      case 'notification':
+        showNotification(data);
+        break;
+    }
+  };
+
+  ws.onmessage = parseMsg;
 
 })();

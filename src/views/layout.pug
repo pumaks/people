@@ -4,30 +4,27 @@ html
     title= title
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    link(rel='stylesheet', href='/styles/main.css')
+    link(rel='stylesheet', href='/styles/css/index.css')
 
     block styles
 
     script(src='/jquery/jquery.min.js')
   body
     header
-      h1 P E O P L E
+      h1 
+        a(href='/users') P E O P L E
       nav
-        li
-          a(href='/') Main
+        a(href='/') Main
         if (!isAuth)
-          li
             a(href='/registration') Registration
-          li 
             a(href='/login') Log In
         else 
-          li 
             a(href='/logout') Log Out
-          li
             a(href='/profile') Profile
-      hr
 
-    block content
+    section#content
+
+      block content
 
     footer
 

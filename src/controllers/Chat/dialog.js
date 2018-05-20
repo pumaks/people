@@ -12,13 +12,13 @@ const findDialog = members =>
 const findByMembers = async (...members) =>
   (await findDialog(members)) || (await create(members));
 
-const addMsg = (chatId, msgId) =>
+const addMsgToDialog = (chatId, msgId) =>
   Dialog.findByIdAndUpdate(chatId, {
     $push: { messages: msgId }
   }).exec();
 
 module.exports = {
   findByMembers,
-  addMsg,
+  addMsgToDialog,
   create
 };

@@ -1,7 +1,8 @@
 'use strict';
 
 (function() {
-  const chatId = $('#dialog').data('chatId');
+  const $dialogPage = $('#dialog-page');
+  const chatId = $('input[name=chatId]').val();
   const ws = new WebSocket(`ws://${window.location.host}/chat/${chatId}`);
 
   const getFormData = $form => {
@@ -10,30 +11,48 @@
     return formData;
   };
 
-  $('.send-msg').click(function(e) {
-    const fd = getFormData($('form'));
-    ws.send(JSON.stringify(fd));
-  });
+  const companionTyping = () => {
+    $dialogPage
+      .find('.messages')
+      .append('<span class="typing">typing...</span>');
+    setTimeout(() => $dialogPage.find('.typing').remove(), 1000);
+  };
 
-  $('input[name=msgText]').keypress(e => {
-    const cid = $('input[name=companionId]').val();
-    ws.send(JSON.stringify({ type: 'writing', companionId: cid }));
-  });
+  const appendMsg = ({ text, from, createdAt }) => {
+    $dialogPage.find('.messages').append(
+      `<div class='msg'>
+        <div class='text'>${text}</div>
+        <div class='from'>${from}</div>
+        <div class='time'>${createdAt}</div>
+      </div>`
+    );
+  };
 
-  ws.onmessage = e => {
-    const msg = JSON.parse(e.data);
-    if (msg.type === 'writing') {
-      $('.messages').append('<span class="wr">writing...</span>');
-      setTimeout(() => $('.wr').remove(), 1000);
-    } else {
-      $('.messages').append(
-        `<div class='msg'>
-        <div class='text'>${msg.text}</div>
-        <div class='from'>${msg.from}</div>
-        <div class='time'>${msg.createdAt}</div>
-    </div>`
-      );
+  const parseMsg = e => {
+    const data = JSON.parse(e.data);
+    switch (data.type) {
+      case 'typing':
+        companionTyping(data);
+        break;
+      case 'msg':
+        appendMsg(data);
+        break;
     }
   };
+
+  ws.onmessage = parseMsg;
+
+  $dialogPage.on('click', '.send-msg', sendMsgWS);
+  $dialogPage.on('keypress', 'input[name=msgText]', sendTypeSignalWS);
+
+  function sendMsgWS() {
+    const fd = getFormData($('form'));
+    ws.send(JSON.stringify(fd));
+  }
+
+  function sendTypeSignalWS() {
+    const companionId = $('input[name=companionId]').val();
+    ws.send(JSON.stringify({ type: 'typing', companionId }));
+  }
 
 })();

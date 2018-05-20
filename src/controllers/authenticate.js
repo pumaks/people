@@ -42,7 +42,6 @@ const login = (req, res, next) => {
     if (user)
       return req.logIn(user, err => {
         if (err) return next(err);
-        // res.locals.user = user;
         res.redirect('/profile');
       });
     res.render('login', {
